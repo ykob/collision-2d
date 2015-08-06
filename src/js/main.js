@@ -16,12 +16,17 @@ var movers = [];
 
 var init = function() {
   for (var i = 0; i < moversNum; i++) {
-    movers[i] = new Mover();
-    movers[i].position.set(body_width, body_height);
-    movers[i].velocity.set(body_width, body_height);
+    var mover = new Mover();
+    var radian = util.getRadian(util.getRandomInt(0, 360));
+    var scalar = util.getRandomInt(5, 10);
+    var fource = new Vector2(Math.cos(radian) * scalar, Math.sin(radian) * scalar);
+    
+    mover.position.set(body_width, body_height);
+    mover.velocity.set(body_width, body_height);
+    mover.applyFource(fource);
+    movers[i] = mover;
   }
   
-  canvasInt();
   setEvent();
   resizeCanvas();
   renderloop();
@@ -30,16 +35,18 @@ var init = function() {
   });
 };
 
-var canvasInt = function() {
-  
-  ctx.lineWidth = 4;
-};
-
 var render = function() {
   ctx.clearRect(0, 0, body_width, body_height);
   for (var i = 0; i < movers.length; i++) {
     var mover = movers[i];
     mover.move();
+    if (mover.acceleration.length() <= 0) {
+      var radian = util.getRadian(util.getRandomInt(0, 360));
+      var scalar = util.getRandomInt(5, 10);
+      var fource = new Vector2(Math.cos(radian) * scalar, Math.sin(radian) * scalar);
+      
+      mover.applyFource(fource);
+    }
     mover.draw(ctx);
   }
 };
@@ -47,7 +54,6 @@ var render = function() {
 var renderloop = function() {
   var now = Date.now();
   requestAnimationFrame(renderloop);
-
   if (now - last_time_render > 1000 / fps) {
     render();
     last_time_render = Date.now();

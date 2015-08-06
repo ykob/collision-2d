@@ -4,21 +4,33 @@ var Vector2 = require('./vector2');
 
 var exports = function(){
   var Mover = function() {
-    var radian = util.getRadian(util.getRandomInt(0, 360));
-    
     this.radius = util.getRandomInt(20, 60);
     this.position = new Vector2();
     this.velocity = new Vector2();
-    this.accelerationScalar = util.getRandomInt(1, 5);
-    this.acceleration = new Vector2(Math.cos(radian) * this.accelerationScalar, Math.sin(radian) * this.accelerationScalar);
+    this.acceleration = new Vector2();
     this.direction = 0;
   };
   
   Mover.prototype = {
     move: function() {
+      this.applyFriction();
       this.velocity.add(this.acceleration);
-      this.direct(this.velocity);
-      this.position.set(this.velocity.x, this.velocity.y);
+      if(this.velocity.distanceTo(this.position) > 0.1) {
+        this.direct(this.velocity);
+        this.position.set(this.velocity.x, this.velocity.y);
+      } else {
+        this.acceleration.set(0, 0);
+      }
+    },
+    applyFource: function(vector) {
+      this.acceleration.add(vector);
+    },
+    applyFriction: function() {
+      var friction = this.acceleration.clone();
+      friction.multScalar(-1);
+      friction.normalize();
+      friction.multScalar(0.2);
+      this.applyFource(friction);
     },
     direct: function(vector) {
       var v = vector.clone().sub(this.position);

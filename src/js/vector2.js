@@ -81,8 +81,11 @@ var exports = function(){
     dot: function (v) {
       return this.x * v.x + this.y * v.y;
     },
+    lengthSq: function () {
+      return this.x * this.x + this.y * this.y;
+    },
     length: function () {
-      return Math.sqrt(this.x * this.x + this.y * this.y);
+      return Math.sqrt(this.lengthSq());
     },
     normalize: function () {
       return this.divScalar(this.length());
