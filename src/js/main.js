@@ -1,5 +1,7 @@
 var Util = require('./util');
 var util = new Util();
+var Vector2 = require('./vector2');
+var Mover = require('./mover');
 var debounce = require('./debounce');
 
 var body_width = document.body.clientWidth;
@@ -9,19 +11,37 @@ var ctx = canvas.getContext('2d');
 var fps = 60;
 var last_time_render = Date.now();
 
+var moversNum = 10;
 var movers = [];
 
 var init = function() {
-  renderloop();
+  for (var i = 0; i < moversNum; i++) {
+    movers[i] = new Mover();
+    movers[i].position.set(body_width, body_height);
+    movers[i].velocity.set(body_width, body_height);
+  }
+  
+  canvasInt();
   setEvent();
   resizeCanvas();
+  renderloop();
   debounce(window, 'resize', function(event){
     resizeCanvas();
   });
 };
 
+var canvasInt = function() {
+  
+  ctx.lineWidth = 4;
+};
+
 var render = function() {
   ctx.clearRect(0, 0, body_width, body_height);
+  for (var i = 0; i < movers.length; i++) {
+    var mover = movers[i];
+    mover.move();
+    mover.draw(ctx);
+  }
 };
 
 var renderloop = function() {
