@@ -9,13 +9,11 @@ body {
   height: 100%;
   overflow: hidden;
 }
-h1 {
+canvas {
   position: absolute;
-  top: 50%;
+  top: 0;
   right: 0;
+  bottom: 0;
   left: 0;
-  margin-top: -1.5rem;
-  font-size: 3rem;
-  font-family: 'Hammersmith One', sans-serif;
-  text-align: center;
 }
+

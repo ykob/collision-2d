@@ -1,3 +1,3 @@
-# demo-simple-2d-collision-detection
+# demo-2d-collision-detection
 
-http://ykob.github.io/demo-simple-2d-collision-detection/
+http://ykob.github.io/demo-2d-collision-detection/
