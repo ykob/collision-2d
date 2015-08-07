@@ -4,8 +4,8 @@ var Vector2 = require('./vector2');
 
 var exports = function(){
   var Mover = function() {
-    this.radius = util.getRandomInt(20, 40);
-    this.mass = this.radius / 20;
+    this.radius = util.getRandomInt(30, 90);
+    this.mass = this.radius / 30;
     this.position = new Vector2();
     this.velocity = new Vector2();
     this.acceleration = new Vector2();
@@ -19,6 +19,8 @@ var exports = function(){
       if (this.velocity.distanceTo(this.position) >= 1) {
         this.direct(this.velocity);
       }
+    },
+    updatePosition: function() {
       this.position.copy(this.velocity);
     },
     applyFource: function(vector) {
@@ -35,13 +37,19 @@ var exports = function(){
       var v = vector.clone().sub(this.position);
       this.direction = Math.atan2(v.y, v.x);
     },
+    rebound: function(vector) {
+      var dot = this.acceleration.clone().dot(vector);
+      this.acceleration.sub(vector.multScalar(2 * dot));
+    },
     draw: function(context) {
-      context.lineWidth = 4;
+      context.lineWidth = 8;
       
+      context.fillStyle = '#333333';
       context.beginPath();
       context.arc(this.position.x, this.position.y, this.radius, 0, Math.PI / 180, true);
-      context.stroke();
+      context.fill();
       
+      context.strokeStyle = '#ffffff';
       context.beginPath();
       context.moveTo(this.position.x, this.position.y);
       context.lineTo(this.position.x + Math.cos(this.direction) * this.radius, this.position.y + Math.sin(this.direction) * this.radius);
