@@ -18,11 +18,8 @@ var exports = function(){
       this.velocity.add(this.acceleration);
       if (this.velocity.distanceTo(this.position) >= 1) {
         this.direct(this.velocity);
-        this.position.copy(this.velocity);
       }
-    },
-    update: function() {
-      
+      this.position.copy(this.velocity);
     },
     applyFource: function(vector) {
       this.acceleration.add(vector);
@@ -31,7 +28,7 @@ var exports = function(){
       var friction = this.acceleration.clone();
       friction.multScalar(-1);
       friction.normalize();
-      friction.multScalar(2).round().divScalar(10);
+      friction.multScalar(0.2);
       this.applyFource(friction);
     },
     direct: function(vector) {

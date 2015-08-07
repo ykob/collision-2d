@@ -4,8 +4,8 @@ var Vector2 = require('./vector2');
 var Mover = require('./mover');
 var debounce = require('./debounce');
 
-var body_width = document.body.clientWidth;
-var body_height = document.body.clientHeight;
+var body_width  = document.body.clientWidth * 2;
+var body_height = document.body.clientHeight * 2;
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 var fps = 60;
@@ -21,8 +21,8 @@ var init = function() {
     var scalar = util.getRandomInt(20, 40);
     var fource = new Vector2(Math.cos(radian) * scalar, Math.sin(radian) * scalar);
     
-    mover.position.set(body_width, body_height);
-    mover.velocity.set(body_width, body_height);
+    mover.position.set(body_width / 2, body_height / 2);
+    mover.velocity.set(body_width / 2, body_height / 2);
     fource.divScalar(mover.mass);
     mover.applyFource(fource);
     movers[i] = mover;
@@ -51,21 +51,25 @@ var updateMover = function() {
       fource.divScalar(mover.mass);
       mover.applyFource(fource);
     }
-// 壁との衝突判定
+    // 壁との衝突判定
     if (mover.position.y - mover.radius < 0) {
       var normal = new Vector2(0, 1);
+      mover.velocity.y = mover.radius;
       mover.position.y = mover.radius;
       collision = true;
     } else if (mover.position.y + mover.radius > body_height) {
       var normal = new Vector2(0, -1);
+      mover.velocity.y = body_height - mover.radius;
       mover.position.y = body_height - mover.radius;
       collision = true;
     } else if (mover.position.x - mover.radius < 0) {
       var normal = new Vector2(1, 0);
+      mover.velocity.x = mover.radius;
       mover.position.x = mover.radius;
       collision = true;
     } else if (mover.position.x + mover.radius > body_width) {
       var normal = new Vector2(-1, 0);
+      mover.velocity.x = body_width - mover.radius;
       mover.position.x = body_width - mover.radius;
       collision = true;
     }
