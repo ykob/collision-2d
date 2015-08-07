@@ -15,6 +15,11 @@ var exports = function(){
       this.y = y;
       return this;
     },
+    copy: function (v) {
+      this.x = v.x;
+      this.y = v.y;
+      return this;
+    },
     add: function (v) {
       this.x += v.x;
       this.y += v.y;
@@ -76,6 +81,43 @@ var exports = function(){
       } else if ( this.y > v_max.y ) {
         this.y = v_max.y;
       }
+      return this;
+    },
+    clampScalar: (function () {
+      var min, max;
+      return function ( minVal, maxVal ) {
+        if ( min === undefined ) {
+          min = new THREE.Vector2();
+          max = new THREE.Vector2();
+        }
+        min.set( minVal, minVal );
+        max.set( maxVal, maxVal );
+        return this.clamp( min, max );
+      };
+    })(),
+    floor: function () {
+      this.x = Math.floor( this.x );
+      this.y = Math.floor( this.y );
+      return this;
+    },
+    ceil: function () {
+      this.x = Math.ceil( this.x );
+      this.y = Math.ceil( this.y );
+      return this;
+    },
+    round: function () {
+      this.x = Math.round( this.x );
+      this.y = Math.round( this.y );
+      return this;
+    },
+    roundToZero: function () {
+      this.x = ( this.x < 0 ) ? Math.ceil( this.x ) : Math.floor( this.x );
+      this.y = ( this.y < 0 ) ? Math.ceil( this.y ) : Math.floor( this.y );
+      return this;
+    },
+    negate: function () {
+      this.x = - this.x;
+      this.y = - this.y;
       return this;
     },
     dot: function (v) {

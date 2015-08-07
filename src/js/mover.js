@@ -4,7 +4,8 @@ var Vector2 = require('./vector2');
 
 var exports = function(){
   var Mover = function() {
-    this.radius = util.getRandomInt(20, 60);
+    this.radius = util.getRandomInt(20, 40);
+    this.mass = this.radius / 20;
     this.position = new Vector2();
     this.velocity = new Vector2();
     this.acceleration = new Vector2();
@@ -15,12 +16,13 @@ var exports = function(){
     move: function() {
       this.applyFriction();
       this.velocity.add(this.acceleration);
-      if(this.velocity.distanceTo(this.position) > 0.1) {
+      if (this.velocity.distanceTo(this.position) >= 1) {
         this.direct(this.velocity);
-        this.position.set(this.velocity.x, this.velocity.y);
-      } else {
-        this.acceleration.set(0, 0);
+        this.position.copy(this.velocity);
       }
+    },
+    update: function() {
+      
     },
     applyFource: function(vector) {
       this.acceleration.add(vector);
@@ -29,7 +31,7 @@ var exports = function(){
       var friction = this.acceleration.clone();
       friction.multScalar(-1);
       friction.normalize();
-      friction.multScalar(0.2);
+      friction.multScalar(2).round().divScalar(10);
       this.applyFource(friction);
     },
     direct: function(vector) {
@@ -45,7 +47,7 @@ var exports = function(){
       
       context.beginPath();
       context.moveTo(this.position.x, this.position.y);
-      context.lineTo(this.position.x + Math.cos(this.direction) * this.radius * 1.5, this.position.y + Math.sin(this.direction) * this.radius * 1.5);
+      context.lineTo(this.position.x + Math.cos(this.direction) * this.radius, this.position.y + Math.sin(this.direction) * this.radius);
       context.stroke();
     }
   };

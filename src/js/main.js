@@ -11,18 +11,19 @@ var ctx = canvas.getContext('2d');
 var fps = 60;
 var last_time_render = Date.now();
 
-var moversNum = 10;
+var moversNum = 100;
 var movers = [];
 
 var init = function() {
   for (var i = 0; i < moversNum; i++) {
     var mover = new Mover();
     var radian = util.getRadian(util.getRandomInt(0, 360));
-    var scalar = util.getRandomInt(5, 10);
+    var scalar = util.getRandomInt(20, 40);
     var fource = new Vector2(Math.cos(radian) * scalar, Math.sin(radian) * scalar);
     
     mover.position.set(body_width, body_height);
     mover.velocity.set(body_width, body_height);
+    fource.divScalar(mover.mass);
     mover.applyFource(fource);
     movers[i] = mover;
   }
@@ -35,20 +36,51 @@ var init = function() {
   });
 };
 
-var render = function() {
-  ctx.clearRect(0, 0, body_width, body_height);
+var updateMover = function() {
   for (var i = 0; i < movers.length; i++) {
     var mover = movers[i];
+    var collision = false;
+    
     mover.move();
-    if (mover.acceleration.length() <= 0) {
+    // 加速度が0になったときに再度力を加える。
+    if (mover.acceleration.length() <= 1) {
       var radian = util.getRadian(util.getRandomInt(0, 360));
-      var scalar = util.getRandomInt(5, 10);
+      var scalar = util.getRandomInt(20, 40);
       var fource = new Vector2(Math.cos(radian) * scalar, Math.sin(radian) * scalar);
       
+      fource.divScalar(mover.mass);
       mover.applyFource(fource);
+    }
+// 壁との衝突判定
+    if (mover.position.y - mover.radius < 0) {
+      var normal = new Vector2(0, 1);
+      mover.position.y = mover.radius;
+      collision = true;
+    } else if (mover.position.y + mover.radius > body_height) {
+      var normal = new Vector2(0, -1);
+      mover.position.y = body_height - mover.radius;
+      collision = true;
+    } else if (mover.position.x - mover.radius < 0) {
+      var normal = new Vector2(1, 0);
+      mover.position.x = mover.radius;
+      collision = true;
+    } else if (mover.position.x + mover.radius > body_width) {
+      var normal = new Vector2(-1, 0);
+      mover.position.x = body_width - mover.radius;
+      collision = true;
+    }
+    if (collision) {
+      var dot = mover.acceleration.clone().dot(normal);
+      mover.acceleration.sub(normal.multScalar(2 * dot));
     }
     mover.draw(ctx);
   }
+  console.log(movers);
+};
+
+var render = function() {
+  ctx.clearRect(0, 0, body_width, body_height);
+  updateMover();
 };
 
 var renderloop = function() {
