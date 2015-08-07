@@ -83,18 +83,6 @@ var exports = function(){
       }
       return this;
     },
-    clampScalar: (function () {
-      var min, max;
-      return function ( minVal, maxVal ) {
-        if ( min === undefined ) {
-          min = new THREE.Vector2();
-          max = new THREE.Vector2();
-        }
-        min.set( minVal, minVal );
-        max.set( maxVal, maxVal );
-        return this.clamp( min, max );
-      };
-    })(),
     floor: function () {
       this.x = Math.floor( this.x );
       this.y = Math.floor( this.y );
