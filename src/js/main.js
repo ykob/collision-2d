@@ -11,7 +11,7 @@ var ctx = canvas.getContext('2d');
 var fps = 60;
 var last_time_render = Date.now();
 
-var moversNum = 50;
+var moversNum = 30;
 var movers = [];
 
 var init = function() {
@@ -25,6 +25,8 @@ var init = function() {
     var x = body_width / 2;
     var y = body_height / 2;
     
+    mover.radius = util.getRandomInt(body_width / 30, body_width/ 20);
+    mover.mass = mover.radius / 10;
     mover.position.set(x, y);
     mover.velocity.set(x, y);
     fource.divScalar(mover.mass);
@@ -49,7 +51,7 @@ var updateMover = function() {
     // 加速度が0になったときに再度力を加える。
     if (mover.acceleration.length() <= 1) {
       var radian = util.getRadian(util.getRandomInt(0, 360));
-      var scalar = util.getRandomInt(20, 40);
+      var scalar = util.getRandomInt(40, 60);
       var fource = new Vector2(Math.cos(radian) * scalar, Math.sin(radian) * scalar);
       
       fource.divScalar(mover.mass);
@@ -88,7 +90,9 @@ var updateMover = function() {
         movers[index].rebound(normal.clone());
       }
     }
-    mover.updatePosition();
+    if (mover.velocity.distanceTo(mover.position) >= 1) {
+      mover.updatePosition();
+    }
     mover.draw(ctx);
   }
 };
