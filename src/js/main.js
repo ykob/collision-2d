@@ -78,21 +78,20 @@ var updateMover = function() {
     if (collision) {
       mover.rebound(normal);
     }
-    for (var index = i + 1; index < movers.length; index++) {
-      var distance = mover.velocity.distanceTo(movers[index].velocity);
-      var rebound_distance = mover.radius + movers[index].radius;
-      if (distance < rebound_distance) {
-        var overlap = Math.abs(distance - rebound_distance);
-        var normal = mover.velocity.clone().sub(movers[index].velocity).normalize();
-        mover.velocity.sub(normal.clone().multScalar(overlap * -1));
-        movers[index].velocity.sub(normal.clone().multScalar(overlap));
-        mover.rebound(normal.clone().multScalar(-1));
-        movers[index].rebound(normal.clone());
-      }
-    }
-    if (mover.velocity.distanceTo(mover.position) >= 1) {
-      mover.updatePosition();
-    }
+    // mover同士の衝突判定
+    // for (var index = i + 1; index < movers.length; index++) {
+    //   var distance = mover.velocity.distanceTo(movers[index].velocity);
+    //   var rebound_distance = mover.radius + movers[index].radius;
+    //   if (distance < rebound_distance) {
+    //     var overlap = Math.abs(distance - rebound_distance);
+    //     var normal = mover.velocity.clone().sub(movers[index].velocity).normalize();
+    //     mover.velocity.sub(normal.clone().multScalar(overlap * -1));
+    //     movers[index].velocity.sub(normal.clone().multScalar(overlap));
+    //     mover.rebound(normal.clone().multScalar(-1));
+    //     movers[index].rebound(normal.clone());
+    //   }
+    // }
+    mover.updatePosition();
     mover.draw(ctx);
   }
 };

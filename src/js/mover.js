@@ -10,9 +10,9 @@ var exports = function(){
     this.velocity = new Vector2();
     this.acceleration = new Vector2();
     this.direction = 0;
-    this.r = util.getRandomInt(60, 120);
-    this.g = util.getRandomInt(120, 180);
-    this.b = util.getRandomInt(180, 220);
+    this.r = util.getRandomInt(220, 255);
+    this.g = util.getRandomInt(80, 220);
+    this.b = util.getRandomInt(120, 140);
   };
   
   Mover.prototype = {
