@@ -11,7 +11,7 @@ var ctx = canvas.getContext('2d');
 var fps = 60;
 var last_time_render = Date.now();
 
-var moversNum = 30;
+var moversNum = 80;
 var movers = [];
 
 var init = function() {
@@ -24,9 +24,15 @@ var init = function() {
     var y = util.getRandomInt(mover.radius, body_height - mover.radius);
     var x = body_width / 2;
     var y = body_height / 2;
+    var radius_base = 0;
+    if (body_width < body_height) {
+      radius_base = body_width / 4;
+    } else {
+      radius_base = body_height / 4;
+    }
     
-    mover.radius = util.getRandomInt(body_width / 30, body_width/ 20);
-    mover.mass = mover.radius / 10;
+    mover.radius = util.getRandomInt(radius_base / 2, radius_base);
+    mover.mass = mover.radius / 20;
     mover.position.set(x, y);
     mover.velocity.set(x, y);
     fource.divScalar(mover.mass);
@@ -51,7 +57,7 @@ var updateMover = function() {
     // 加速度が0になったときに再度力を加える。
     if (mover.acceleration.length() <= 1) {
       var radian = util.getRadian(util.getRandomInt(0, 360));
-      var scalar = util.getRandomInt(40, 60);
+      var scalar = util.getRandomInt(200, 300);
       var fource = new Vector2(Math.cos(radian) * scalar, Math.sin(radian) * scalar);
       
       fource.divScalar(mover.mass);
@@ -98,6 +104,7 @@ var updateMover = function() {
 
 var render = function() {
   ctx.clearRect(0, 0, body_width, body_height);
+  ctx.globalCompositeOperation = 'lighter';
   updateMover();
 };
 

@@ -46,15 +46,21 @@ var exports = function(){
       this.acceleration.multScalar(0.8);
     },
     draw: function(context) {
-      context.lineWidth = 8;
+      var grad = context.createRadialGradient(this.position.x, this.position.y, 0, this.position.x, this.position.y, this.radius);
 
-      context.fillStyle = 'rgb(' + this.r + ',' + this.g + ',' + this.b + ')';
+      grad.addColorStop(0, 'rgba(' + this.r + ',' + this.g + ',' + this.b + ', 0.3)');
+      grad.addColorStop(1, 'rgba(' + this.r + ',' + this.g + ',' + this.b + ', 0)');
+      // context.lineWidth = 8;
+      // context.fillStyle = 'rgb(' + this.r + ',' + this.g + ',' + this.b + ')';
+      context.fillStyle = grad;
+      
       context.beginPath();
-      context.arc(this.position.x, this.position.y, this.radius, 0, Math.PI / 180, true);
+      // context.arc(this.position.x, this.position.y, this.radius, 0, Math.PI / 180, true);
       // context.shadowColor = '#333'
       // context.shadowOffsetX = 0;
       // context.shadowOffsetY = 0;
       // context.shadowBlur = 200;
+      context.rect(this.position.x - this.radius, this.position.y - this.radius, this.position.x + this.radius, this.position.y + this.radius);
       context.fill();
       
       // context.strokeStyle = '#ffffff';
