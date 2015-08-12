@@ -19,9 +19,7 @@ var init = function() {
     var mover = new Mover();
     var radian = util.getRadian(util.getRandomInt(0, 360));
     var scalar = util.getRandomInt(20, 40);
-    var fource = new Vector2(Math.cos(radian) * scalar, Math.sin(radian) * scalar);
-    var x = util.getRandomInt(mover.radius, body_width - mover.radius);
-    var y = util.getRandomInt(mover.radius, body_height - mover.radius);
+    var force = new Vector2(Math.cos(radian) * scalar, Math.sin(radian) * scalar);
     var x = body_width / 2;
     var y = body_height / 2;
     var radius_base = 0;
@@ -30,8 +28,8 @@ var init = function() {
     mover.mass = mover.radius / 10;
     mover.position.set(x, y);
     mover.velocity.set(x, y);
-    fource.divScalar(mover.mass);
-    mover.applyForce(fource);
+    force.divScalar(mover.mass);
+    mover.applyForce(force);
     movers[i] = mover;
   }
   
@@ -49,38 +47,37 @@ var updateMover = function() {
     var collision = false;
     
     mover.move();
+    
     // 加速度が0になったときに再度力を加える。
     if (mover.acceleration.length() <= 1) {
       // var radian = util.getRadian(util.getRandomInt(0, 360));
       // var scalar = util.getRandomInt(200, 300);
-      // var fource = new Vector2(Math.cos(radian) * scalar, Math.sin(radian) * scalar);
+      // var force = new Vector2(Math.cos(radian) * scalar, Math.sin(radian) * scalar);
       
-      // fource.divScalar(mover.mass);
-      // mover.applyForce(fource);
-      
-      var fou
+      // force.divScalar(mover.mass);
+      // mover.applyForce(force);
     }
     // 壁との衝突判定
-    if (mover.position.y - mover.radius < 0) {
-      var normal = new Vector2(0, 1);
-      mover.velocity.y = mover.radius;
-      collision = true;
-    } else if (mover.position.y + mover.radius > body_height) {
-      var normal = new Vector2(0, -1);
-      mover.velocity.y = body_height - mover.radius;
-      collision = true;
-    } else if (mover.position.x - mover.radius < 0) {
-      var normal = new Vector2(1, 0);
-      mover.velocity.x = mover.radius;
-      collision = true;
-    } else if (mover.position.x + mover.radius > body_width) {
-      var normal = new Vector2(-1, 0);
-      mover.velocity.x = body_width - mover.radius;
-      collision = true;
-    }
-    if (collision) {
-      mover.rebound(normal);
-    }
+    // if (mover.position.y - mover.radius < 0) {
+    //   var normal = new Vector2(0, 1);
+    //   mover.velocity.y = mover.radius;
+    //   collision = true;
+    // } else if (mover.position.y + mover.radius > body_height) {
+    //   var normal = new Vector2(0, -1);
+    //   mover.velocity.y = body_height - mover.radius;
+    //   collision = true;
+    // } else if (mover.position.x - mover.radius < 0) {
+    //   var normal = new Vector2(1, 0);
+    //   mover.velocity.x = mover.radius;
+    //   collision = true;
+    // } else if (mover.position.x + mover.radius > body_width) {
+    //   var normal = new Vector2(-1, 0);
+    //   mover.velocity.x = body_width - mover.radius;
+    //   collision = true;
+    // }
+    // if (collision) {
+    //   mover.rebound(normal);
+    // }
     // mover同士の衝突判定
     // for (var index = i + 1; index < movers.length; index++) {
     //   var distance = mover.velocity.distanceTo(movers[index].velocity);

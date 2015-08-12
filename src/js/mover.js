@@ -4,12 +4,11 @@ var Vector2 = require('./vector2');
 
 var exports = function(){
   var Mover = function() {
-    this.radius = 0;
-    this.mass = 0;
     this.position = new Vector2();
     this.velocity = new Vector2();
     this.acceleration = new Vector2();
-    this.anchor = new Vector2();
+    this.radius = 0;
+    this.mass = 0;
     this.direction = 0;
     this.r = util.getRandomInt(220, 255);
     this.g = util.getRandomInt(80, 220);
@@ -18,7 +17,9 @@ var exports = function(){
   
   Mover.prototype = {
     move: function() {
-      this.applyFriction();
+      if (this.acceleration.length() > 0) {
+        this.applyFriction();
+      }
       this.velocity.add(this.acceleration);
       if (this.velocity.distanceTo(this.position) >= 1) {
         this.direct(this.velocity);
@@ -26,6 +27,9 @@ var exports = function(){
     },
     updatePosition: function() {
       this.position.copy(this.velocity);
+      if (this.acceleration.length() < 1) {
+        this.acceleration.set(0, 0);
+      }
     },
     applyForce: function(vector) {
       this.acceleration.add(vector);
