@@ -11,7 +11,7 @@ var ctx = canvas.getContext('2d');
 var fps = 60;
 var last_time_render = Date.now();
 
-var moversNum = 80;
+var moversNum = 100;
 var movers = [];
 
 var init = function() {
@@ -25,18 +25,13 @@ var init = function() {
     var x = body_width / 2;
     var y = body_height / 2;
     var radius_base = 0;
-    if (body_width < body_height) {
-      radius_base = body_width / 4;
-    } else {
-      radius_base = body_height / 4;
-    }
     
-    mover.radius = util.getRandomInt(radius_base / 2, radius_base);
-    mover.mass = mover.radius / 20;
+    mover.radius = util.getRandomInt(20, 40);
+    mover.mass = mover.radius / 10;
     mover.position.set(x, y);
     mover.velocity.set(x, y);
     fource.divScalar(mover.mass);
-    mover.applyFource(fource);
+    mover.applyForce(fource);
     movers[i] = mover;
   }
   
@@ -56,12 +51,14 @@ var updateMover = function() {
     mover.move();
     // 加速度が0になったときに再度力を加える。
     if (mover.acceleration.length() <= 1) {
-      var radian = util.getRadian(util.getRandomInt(0, 360));
-      var scalar = util.getRandomInt(200, 300);
-      var fource = new Vector2(Math.cos(radian) * scalar, Math.sin(radian) * scalar);
+      // var radian = util.getRadian(util.getRandomInt(0, 360));
+      // var scalar = util.getRandomInt(200, 300);
+      // var fource = new Vector2(Math.cos(radian) * scalar, Math.sin(radian) * scalar);
       
-      fource.divScalar(mover.mass);
-      mover.applyFource(fource);
+      // fource.divScalar(mover.mass);
+      // mover.applyForce(fource);
+      
+      var fou
     }
     // 壁との衝突判定
     if (mover.position.y - mover.radius < 0) {

@@ -9,6 +9,7 @@ var exports = function(){
     this.position = new Vector2();
     this.velocity = new Vector2();
     this.acceleration = new Vector2();
+    this.anchor = new Vector2();
     this.direction = 0;
     this.r = util.getRandomInt(220, 255);
     this.g = util.getRandomInt(80, 220);
@@ -26,7 +27,7 @@ var exports = function(){
     updatePosition: function() {
       this.position.copy(this.velocity);
     },
-    applyFource: function(vector) {
+    applyForce: function(vector) {
       this.acceleration.add(vector);
     },
     applyFriction: function() {
@@ -34,7 +35,7 @@ var exports = function(){
       friction.multScalar(-1);
       friction.normalize();
       friction.multScalar(0.1);
-      this.applyFource(friction);
+      this.applyForce(friction);
     },
     direct: function(vector) {
       var v = vector.clone().sub(this.position);
@@ -46,28 +47,12 @@ var exports = function(){
       this.acceleration.multScalar(0.8);
     },
     draw: function(context) {
-      var grad = context.createRadialGradient(this.position.x, this.position.y, 0, this.position.x, this.position.y, this.radius);
-
-      grad.addColorStop(0, 'rgba(' + this.r + ',' + this.g + ',' + this.b + ', 0.3)');
-      grad.addColorStop(1, 'rgba(' + this.r + ',' + this.g + ',' + this.b + ', 0)');
-      // context.lineWidth = 8;
-      // context.fillStyle = 'rgb(' + this.r + ',' + this.g + ',' + this.b + ')';
-      context.fillStyle = grad;
+      context.lineWidth = 8;
+      context.fillStyle = 'rgb(' + this.r + ',' + this.g + ',' + this.b + ')';
       
       context.beginPath();
-      // context.arc(this.position.x, this.position.y, this.radius, 0, Math.PI / 180, true);
-      // context.shadowColor = '#333'
-      // context.shadowOffsetX = 0;
-      // context.shadowOffsetY = 0;
-      // context.shadowBlur = 200;
-      context.rect(this.position.x - this.radius, this.position.y - this.radius, this.position.x + this.radius, this.position.y + this.radius);
+      context.arc(this.position.x, this.position.y, this.radius, 0, Math.PI / 180, true);
       context.fill();
-      
-      // context.strokeStyle = '#ffffff';
-      // context.beginPath();
-      // context.moveTo(this.position.x, this.position.y);
-      // context.lineTo(this.position.x + Math.cos(this.direction) * this.radius, this.position.y + Math.sin(this.direction) * this.radius);
-      // context.stroke();
     }
   };
   
