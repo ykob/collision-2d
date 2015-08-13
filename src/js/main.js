@@ -10,25 +10,25 @@ var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 var fps = 60;
 var last_time_render = Date.now();
+var last_time_force = Date.now();
 
-var moversNum = 100;
+var moversNum = 60;
 var movers = [];
 
 var init = function() {
   for (var i = 0; i < moversNum; i++) {
     var mover = new Mover();
     var radian = util.getRadian(util.getRandomInt(0, 360));
-    var scalar = util.getRandomInt(20, 40);
+    var scalar = 100;
     var force = new Vector2(Math.cos(radian) * scalar, Math.sin(radian) * scalar);
     var x = body_width / 2;
     var y = body_height / 2;
-    var radius_base = 0;
     
-    mover.radius = util.getRandomInt(20, 40);
+    mover.radius = util.getRandomInt(50, 120);
     mover.mass = mover.radius / 10;
     mover.position.set(x, y);
     mover.velocity.set(x, y);
-    force.divScalar(mover.mass);
+    mover.anchor.set(x, y);
     mover.applyForce(force);
     movers[i] = mover;
   }
@@ -46,17 +46,9 @@ var updateMover = function() {
     var mover = movers[i];
     var collision = false;
     
+    mover.applyDragForce();
     mover.move();
-    
-    // 加速度が0になったときに再度力を加える。
-    if (mover.acceleration.length() <= 1) {
-      // var radian = util.getRadian(util.getRandomInt(0, 360));
-      // var scalar = util.getRandomInt(200, 300);
-      // var force = new Vector2(Math.cos(radian) * scalar, Math.sin(radian) * scalar);
-      
-      // force.divScalar(mover.mass);
-      // mover.applyForce(force);
-    }
+    mover.hook();
     // 壁との衝突判定
     // if (mover.position.y - mover.radius < 0) {
     //   var normal = new Vector2(0, 1);
@@ -108,6 +100,16 @@ var renderloop = function() {
   if (now - last_time_render > 1000 / fps) {
     render();
     last_time_render = Date.now();
+  }
+  if (now - last_time_force > 1000) {
+    for(var i = 0, length1 = movers.length; i < length1; i++){
+      var mover = movers[i];
+      var radian = util.getRadian(util.getRandomInt(0, 360));
+      var scalar = 100;
+      var force = new Vector2(Math.cos(radian) * scalar, Math.sin(radian) * scalar);
+      mover.applyForce(force);
+    }
+    last_time_force = Date.now();
   }
 };
 
