@@ -18,14 +18,14 @@ var exports = function(){
   };
   
   Mover.prototype = {
-    move: function() {
+    updatePosition: function() {
+      this.position.copy(this.velocity);
+    },
+    updateVelocity: function() {
       this.velocity.add(this.acceleration);
       if (this.velocity.distanceTo(this.position) >= 1) {
         this.direct(this.velocity);
       }
-    },
-    updatePosition: function() {
-      this.position.copy(this.velocity);
     },
     applyForce: function(vector) {
       this.acceleration.add(vector);

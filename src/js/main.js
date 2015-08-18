@@ -47,7 +47,6 @@ var updateMover = function() {
     var collision = false;
     
     mover.applyDragForce();
-    mover.move();
     mover.hook();
     // 壁との衝突判定
     // if (mover.position.y - mover.radius < 0) {
@@ -70,7 +69,7 @@ var updateMover = function() {
     // if (collision) {
     //   mover.rebound(normal);
     // }
-    // mover同士の衝突判定
+    // //mover同士の衝突判定
     // for (var index = i + 1; index < movers.length; index++) {
     //   var distance = mover.velocity.distanceTo(movers[index].velocity);
     //   var rebound_distance = mover.radius + movers[index].radius;
@@ -83,6 +82,7 @@ var updateMover = function() {
     //     movers[index].rebound(normal.clone());
     //   }
     // }
+    mover.updateVelocity();
     mover.updatePosition();
     mover.draw(ctx);
   }
