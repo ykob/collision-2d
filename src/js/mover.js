@@ -1,6 +1,6 @@
 var Util = require('./util');
-var util = new Util();
 var Vector2 = require('./vector2');
+var Force = require('./force');
 
 var exports = function(){
   var Mover = function() {
@@ -12,9 +12,9 @@ var exports = function(){
     this.mass = 0;
     this.direction = 0;
     this.k = 0.05;
-    this.r = util.getRandomInt(80, 255);
-    this.g = util.getRandomInt(80, 255);
-    this.b = util.getRandomInt(120, 140);
+    this.r = Util.getRandomInt(80, 255);
+    this.g = Util.getRandomInt(80, 255);
+    this.b = Util.getRandomInt(120, 140);
   };
   
   Mover.prototype = {
@@ -31,36 +31,25 @@ var exports = function(){
       this.acceleration.add(vector);
     },
     applyFriction: function() {
-      var friction = this.acceleration.clone();
-      friction.multScalar(-1);
-      friction.normalize();
-      friction.multScalar(0.1);
+      var friction = Force.friction(this.acceleration, 0.1);
       this.applyForce(friction);
     },
     applyDragForce: function() {
-      var drag = this.acceleration.clone();
-      drag.multScalar(-1);
-      drag.normalize();
-      drag.multScalar(this.acceleration.length() * 0.1);
+      var drag = Force.drag(this.acceleration, 0.1);
       this.applyForce(drag);
     },
     hook: function() {
-      var force = this.velocity.clone().sub(this.anchor);
-      var distance = force.length();
-      if (distance > 0) {
-        force.normalize();
-        force.multScalar(-1 * this.k * distance);
-        this.applyForce(force); 
-      }
-    },
-    direct: function(vector) {
-      var v = vector.clone().sub(this.position);
-      this.direction = Math.atan2(v.y, v.x);
+      var force = Force.hook(this.velocity, this.anchor, this.k);
+      this.applyForce(force);
     },
     rebound: function(vector) {
       var dot = this.acceleration.clone().dot(vector);
       this.acceleration.sub(vector.multScalar(2 * dot));
       this.acceleration.multScalar(0.8);
+    },
+    direct: function(vector) {
+      var v = vector.clone().sub(this.position);
+      this.direction = Math.atan2(v.y, v.x);
     },
     draw: function(context) {
       // context.lineWidth = 8;

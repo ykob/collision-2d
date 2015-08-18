@@ -1,5 +1,4 @@
 var Util = require('./util');
-var util = new Util();
 var Vector2 = require('./vector2');
 var Mover = require('./mover');
 var debounce = require('./debounce');
@@ -18,13 +17,13 @@ var movers = [];
 var init = function() {
   for (var i = 0; i < moversNum; i++) {
     var mover = new Mover();
-    var radian = util.getRadian(util.getRandomInt(0, 360));
+    var radian = Util.getRadian(Util.getRandomInt(0, 360));
     var scalar = 100;
     var force = new Vector2(Math.cos(radian) * scalar, Math.sin(radian) * scalar);
     var x = body_width / 2;
     var y = body_height / 2;
     
-    mover.radius = util.getRandomInt(50, 120);
+    mover.radius = Util.getRandomInt(50, 120);
     mover.mass = mover.radius / 10;
     mover.position.set(x, y);
     mover.velocity.set(x, y);
@@ -104,7 +103,7 @@ var renderloop = function() {
   if (now - last_time_force > 1000) {
     for(var i = 0, length1 = movers.length; i < length1; i++){
       var mover = movers[i];
-      var radian = util.getRadian(util.getRandomInt(0, 360));
+      var radian = Util.getRadian(Util.getRandomInt(0, 360));
       var scalar = 100;
       var force = new Vector2(Math.cos(radian) * scalar, Math.sin(radian) * scalar);
       mover.applyForce(force);
