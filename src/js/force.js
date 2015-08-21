@@ -2,18 +2,18 @@ var Vector2 = require('./vector2');
 
 var exports = {
   friction: function(vector, value) {
-    var friction = vector.clone();
-    friction.multScalar(-1);
-    friction.normalize();
-    friction.multScalar(value);
-    return friction;
+    var force = vector.clone();
+    force.multScalar(-1);
+    force.normalize();
+    force.multScalar(value);
+    return force;
   },
   drag: function(vector, value) {
-    var drag = vector.clone();
-    drag.multScalar(-1);
-    drag.normalize();
-    drag.multScalar(vector.length() * value);
-    return drag;
+    var force = vector.clone();
+    force.multScalar(-1);
+    force.normalize();
+    force.multScalar(vector.length() * value);
+    return force;
   },
   hook: function(v_velocity, v_anchor, k) {
     var force = v_velocity.clone().sub(v_anchor);
