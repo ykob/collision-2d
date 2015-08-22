@@ -17,5 +17,7 @@ canvas {
   left: 0;
   -webkit-filter: contrast(150%);
   filter: contrast(150%);
-  background: radial-gradient(ellipse at center, #665522 0%,#110000 100%); 
+  -webkit-filter: url('#ameba');
+  -moz-filter: url('#ameba');
+  filter: url('#ameba');
 }

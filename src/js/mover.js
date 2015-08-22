@@ -12,9 +12,9 @@ var exports = function(){
     this.mass = 0;
     this.direction = 0;
     this.k = 0.05;
-    this.r = Util.getRandomInt(80, 255);
-    this.g = Util.getRandomInt(80, 255);
-    this.b = Util.getRandomInt(120, 140);
+    this.r = Util.getRandomInt(220, 255);
+    this.g = Util.getRandomInt(100, 160);
+    this.b = Util.getRandomInt(60, 100);
   };
   
   Mover.prototype = {
@@ -52,22 +52,28 @@ var exports = function(){
       this.direction = Math.atan2(v.y, v.x);
     },
     draw: function(context) {
-      // context.lineWidth = 8;
-      // context.fillStyle = 'rgb(' + this.r + ',' + this.g + ',' + this.b + ')';
-      
-      // context.beginPath();
-      // context.arc(this.position.x, this.position.y, this.radius, 0, Math.PI / 180, true);
-      // context.fill();
-      
-      var grad = context.createRadialGradient(this.position.x, this.position.y, 0, this.position.x, this.position.y, this.radius);
-
-      grad.addColorStop(0, 'rgba(' + this.r + ',' + this.g + ',' + this.b + ', 0.3)');
-      grad.addColorStop(1, 'rgba(' + this.r + ',' + this.g + ',' + this.b + ', 0)');
-      context.fillStyle = grad;
-      
+      context.lineWidth = 8;
+      context.fillStyle = 'rgb(' + this.r + ',' + this.g + ',' + this.b + ')';
       context.beginPath();
-      context.rect(this.position.x - this.radius, this.position.y - this.radius, this.position.x + this.radius, this.position.y + this.radius);
+      context.arc(this.position.x, this.position.y, this.radius, 0, Math.PI / 180, true);
       context.fill();
+      
+      // var radius = this.radius * 6;
+      // var grad = context.createRadialGradient(this.position.x, this.position.y, 0, this.position.x, this.position.y, radius);
+      // var x1 = this.position.x - radius;
+      // var x2 = this.position.x + radius;
+      // var y1 = this.position.y - radius;
+      // var y2 = this.position.y + radius;
+      
+      // if (x1 < 0) x1 = 0;
+      // if (y1 < 0) y1 = 0;
+
+      // grad.addColorStop(0, 'rgba(' + this.r + ',' + this.g + ',' + this.b + ', 0.2)');
+      // grad.addColorStop(1, 'rgba(' + this.r + ',' + this.g + ',' + this.b + ', 0)');
+      // context.fillStyle = grad;
+      // context.beginPath();
+      // context.rect(x1, y1, x2, y2);
+      // context.fill();
     }
   };
   
