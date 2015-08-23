@@ -15,9 +15,6 @@ canvas {
   right: 0;
   bottom: 0;
   left: 0;
-  -webkit-filter: contrast(150%);
-  filter: contrast(150%);
   -webkit-filter: url('#ameba');
-  -moz-filter: url('#ameba');
   filter: url('#ameba');
 }
