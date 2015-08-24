@@ -13,8 +13,8 @@ var exports = function(){
     this.direction = 0;
     this.k = 0.05;
     this.r = Util.getRandomInt(220, 255);
-    this.g = Util.getRandomInt(100, 160);
-    this.b = Util.getRandomInt(60, 100);
+    this.g = Util.getRandomInt(100, 220);
+    this.b = Util.getRandomInt(120, 140);
   };
   
   Mover.prototype = {
@@ -51,29 +51,42 @@ var exports = function(){
       var v = vector.clone().sub(this.position);
       this.direction = Math.atan2(v.y, v.x);
     },
-    draw: function(context) {
-      context.lineWidth = 8;
-      context.fillStyle = 'rgb(' + this.r + ',' + this.g + ',' + this.b + ')';
-      context.beginPath();
-      context.arc(this.position.x, this.position.y, this.radius, 0, Math.PI / 180, true);
-      context.fill();
-      
-      // var radius = this.radius * 6;
-      // var grad = context.createRadialGradient(this.position.x, this.position.y, 0, this.position.x, this.position.y, radius);
-      // var x1 = this.position.x - radius;
-      // var x2 = this.position.x + radius;
-      // var y1 = this.position.y - radius;
-      // var y2 = this.position.y + radius;
-      
-      // if (x1 < 0) x1 = 0;
-      // if (y1 < 0) y1 = 0;
+    draw: function(context, mode) {
+      switch (mode) {
+        case 'normal':
+          context.lineWidth = 8;
+          context.fillStyle = 'rgb(' + this.r + ',' + this.g + ',' + this.b + ')';
+          context.beginPath();
+          context.arc(this.position.x, this.position.y, this.radius, 0, Math.PI / 180, true);
+          context.fill();
+          break;
+        case 'glow':
+          var radius = this.radius * 8;
+          var grad = context.createRadialGradient(this.position.x, this.position.y, 0, this.position.x, this.position.y, radius);
+          var x1 = this.position.x - radius;
+          var x2 = this.position.x + radius;
+          var y1 = this.position.y - radius;
+          var y2 = this.position.y + radius;
+          
+          if (x1 < 0) x1 = 0;
+          if (y1 < 0) y1 = 0;
 
-      // grad.addColorStop(0, 'rgba(' + this.r + ',' + this.g + ',' + this.b + ', 0.2)');
-      // grad.addColorStop(1, 'rgba(' + this.r + ',' + this.g + ',' + this.b + ', 0)');
-      // context.fillStyle = grad;
-      // context.beginPath();
-      // context.rect(x1, y1, x2, y2);
-      // context.fill();
+          grad.addColorStop(0.1, 'rgba(' + this.r + ',' + this.g + ',' + this.b + ', 0.2)');
+          grad.addColorStop(1, 'rgba(' + this.r + ',' + this.g + ',' + this.b + ', 0)');
+          context.fillStyle = grad;
+          context.beginPath();
+          context.rect(x1, y1, x2, y2);
+          context.fill();
+
+          break;
+        case 'ameba':
+          context.lineWidth = 8;
+          context.fillStyle = 'rgb(' + this.r + ',' + this.g + ',' + this.b + ')';
+          context.beginPath();
+          context.arc(this.position.x, this.position.y, this.radius, 0, Math.PI / 180, true);
+          context.fill();
+          break;
+      }
     }
   };
   

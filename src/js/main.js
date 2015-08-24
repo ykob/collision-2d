@@ -13,6 +13,13 @@ var last_time_force = Date.now();
 
 var moversNum = 50;
 var movers = [];
+var mode = 'normal';
+var body = document.body;
+var $select_effect = $('.select-effects');
+var $effect_normal = $('.normal', $select_effect);
+var $effect_glow = $('.glow', $select_effect);
+var $effect_ameba = $('.ameba', $select_effect);
+var classname_select = 'is-selected';
 
 var init = function() {
   for (var i = 0; i < moversNum; i++) {
@@ -32,6 +39,7 @@ var init = function() {
     movers[i] = mover;
   }
   
+  changeMode(1);
   setEvent();
   resizeCanvas();
   renderloop();
@@ -92,13 +100,17 @@ var updateMover = function() {
     // }
     mover.updateVelocity();
     mover.updatePosition();
-    mover.draw(ctx);
+    mover.draw(ctx, mode);
   }
 };
 
 var render = function() {
   ctx.clearRect(0, 0, body_width, body_height);
-  //ctx.globalCompositeOperation = 'lighter';
+  if (mode == 'glow') {
+    ctx.globalCompositeOperation = 'lighter';
+  } else {
+    ctx.globalCompositeOperation = 'normal';
+  }
   updateMover();
 };
 
@@ -119,6 +131,25 @@ var resizeCanvas = function() {
   canvas.height = body_height;
   canvas.style.width = body_width / 2 + 'px';
   canvas.style.height = body_height / 2 + 'px';
+};
+
+var changeMode = function(num) {
+  $select_effect.find('.' + classname_select).removeClass(classname_select);
+  switch (num) {
+    case 0:
+      mode = 'normal';
+      $effect_normal.addClass(classname_select);
+      break;
+    case 1:
+      mode = 'glow';
+      $effect_glow.addClass(classname_select);
+      break;
+    case 2:
+      mode = 'ameba';
+      $effect_ameba.addClass(classname_select);
+      break;
+  }
+  body.className = 'mode-' + mode;
 };
 
 var setEvent = function () {
@@ -167,6 +198,21 @@ var setEvent = function () {
   canvas.addEventListener('touchend', function (event) {
     event.preventDefault();
     eventTouchEnd();
+  });
+  
+  $effect_normal.on('click', function(event) {
+    event.preventDefault();
+    changeMode(0);
+  });
+  
+  $effect_glow.on('click', function(event) {
+    event.preventDefault();
+    changeMode(1);
+  });
+  
+  $effect_ameba.on('click', function(event) {
+    event.preventDefault();
+    changeMode(2);
   });
 };
 

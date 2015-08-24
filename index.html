@@ -5,7 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>demo-2d-collision-detection</title>
   <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
-  <link rel="stylesheet" href='http://fonts.googleapis.com/css?family=Hammersmith+One'>
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Source+Code+Pro">
   <link rel="stylesheet" href="css/style.css">
   
   <meta property="og:title" content="demo-2d-collision-detection">
@@ -20,9 +20,18 @@
   </style>
 </head>
 <body>
+  <ul class="select-effects">
+    <li class="normal">normal</li>
+    <li class="glow">glow</li>
+    <li class="ameba">ameba</li>
+  </ul>
   <canvas id="canvas"></canvas>
   <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
     <defs>
+      <filter id="glow">
+        <feGaussianBlur in="SourceGraphic" result="blur" stdDeviation="15" />
+        <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0" result="mix" />
+      </filter>
       <filter id="ameba">
         <feGaussianBlur in="SourceGraphic" result="blur" stdDeviation="30" />
         <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 5 -1" result="blur" />
@@ -31,6 +40,7 @@
       </filter>
     </defs>
   </svg>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

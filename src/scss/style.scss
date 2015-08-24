@@ -8,6 +8,7 @@ html {
 body {
   height: 100%;
   overflow: hidden;
+  font-family: 'Source Code Pro';
 }
 canvas {
   position: absolute;
@@ -15,6 +16,41 @@ canvas {
   right: 0;
   bottom: 0;
   left: 0;
-  -webkit-filter: url('#ameba');
-  filter: url('#ameba');
+}
+.mode-glow {
+  background-color: #000;
+  canvas {
+    -webkit-filter: url('#glow');
+    filter: url('#glow');
+  }
+  .select-effects {
+    border-color: #eee;
+    color: #eee;
+  }
+}
+.mode-ameba {
+  canvas {
+    -webkit-filter: url('#ameba');
+    filter: url('#ameba');
+  }
+}
+.select-effects {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 10000;
+  padding: 0.5em 1em;
+  border-top: 1px solid #333;
+  li {
+    display: inline-block;
+    cursor: pointer;
+    margin-right: 1em;
+    &.is-selected {
+      opacity: 0.5;
+    }
+    &:before {
+      content: ">> ";
+    }
+  }
 }
