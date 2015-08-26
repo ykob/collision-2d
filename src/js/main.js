@@ -21,6 +21,8 @@ var $effect_glow = $('.glow', $select_effect);
 var $effect_ameba = $('.ameba', $select_effect);
 var classname_select = 'is-selected';
 
+var is_drag = false;
+
 var init = function() {
   for (var i = 0; i < moversNum; i++) {
     var mover = new Mover();
@@ -29,8 +31,15 @@ var init = function() {
     var force = new Vector2(Math.cos(radian) * scalar, Math.sin(radian) * scalar);
     var x = body_width / 2;
     var y = body_height / 2;
+    var size = 0;
     
-    mover.radius = Util.getRandomInt(50, 120);
+    if (body_width > body_height) {
+      size = body_height / 36;
+    } else {
+      size = body_width / 36;
+    }
+    
+    mover.radius = Util.getRandomInt(size, size * 3);
     mover.mass = mover.radius / 10;
     mover.position.set(x, y);
     mover.velocity.set(x, y);
@@ -39,7 +48,7 @@ var init = function() {
     movers[i] = mover;
   }
   
-  changeMode(1);
+  changeMode(0);
   setEvent();
   resizeCanvas();
   renderloop();
@@ -104,6 +113,40 @@ var updateMover = function() {
   }
 };
 
+var applyForceClick = function(v) {
+  for (var i = 0; i < movers.length; i++) {
+    var distance = v.distanceTo(movers[i].position);
+    var direct = v.clone().sub(movers[i].position);
+    var scalar = (body_width - distance) / 1000;
+    var force = null;
+    
+    if (scalar < 0) scalar = 0;
+    direct.normalize();
+    force = direct.multScalar(scalar * -1);
+    movers[i].applyForce(force);
+    console.log(v);
+  };
+};
+
+var changeMode = function(num) {
+  $select_effect.find('.' + classname_select).removeClass(classname_select);
+  switch (num) {
+    case 0:
+      mode = 'normal';
+      $effect_normal.addClass(classname_select);
+      break;
+    case 1:
+      mode = 'glow';
+      $effect_glow.addClass(classname_select);
+      break;
+    case 2:
+      mode = 'ameba';
+      $effect_ameba.addClass(classname_select);
+      break;
+  }
+  body.className = 'mode-' + mode;
+};
+
 var render = function() {
   ctx.clearRect(0, 0, body_width, body_height);
   if (mode == 'glow') {
@@ -133,33 +176,20 @@ var resizeCanvas = function() {
   canvas.style.height = body_height / 2 + 'px';
 };
 
-var changeMode = function(num) {
-  $select_effect.find('.' + classname_select).removeClass(classname_select);
-  switch (num) {
-    case 0:
-      mode = 'normal';
-      $effect_normal.addClass(classname_select);
-      break;
-    case 1:
-      mode = 'glow';
-      $effect_glow.addClass(classname_select);
-      break;
-    case 2:
-      mode = 'ameba';
-      $effect_ameba.addClass(classname_select);
-      break;
-  }
-  body.className = 'mode-' + mode;
-};
-
 var setEvent = function () {
-  var eventTouchStart = function(x, y) {
+  var eventTouchStart = function(v) {
+    is_drag = true;
+    applyForceClick(v);
   };
   
-  var eventTouchMove = function(x, y) {
+  var eventTouchMove = function(v) {
+    if (is_drag) {
+      applyForceClick(v);
+    }
   };
   
-  var eventTouchEnd = function(x, y) {
+  var eventTouchEnd = function(v) {
+    is_drag = false;
   };
 
   canvas.addEventListener('contextmenu', function (event) {
@@ -172,12 +202,14 @@ var setEvent = function () {
 
   canvas.addEventListener('mousedown', function (event) {
     event.preventDefault();
-    eventTouchStart(event.clientX, event.clientY);
+    var vector = new Vector2(event.clientX * 2, event.clientY * 2);
+    eventTouchStart(vector);
   });
 
   canvas.addEventListener('mousemove', function (event) {
     event.preventDefault();
-    eventTouchMove(event.clientX, event.clientY);
+    var vector = new Vector2(event.clientX * 2, event.clientY * 2);
+    eventTouchMove(vector);
   });
 
   canvas.addEventListener('mouseup', function (event) {
