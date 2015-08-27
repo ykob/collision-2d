@@ -49,7 +49,7 @@ var init = function() {
     movers[i] = mover;
   }
   
-  changeMode(0);
+  changeMode(2);
   setEvent();
   resizeCanvas();
   renderloop();
