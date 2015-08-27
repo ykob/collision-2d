@@ -21,6 +21,7 @@ var $effect_glow = $('.glow', $select_effect);
 var $effect_ameba = $('.ameba', $select_effect);
 var classname_select = 'is-selected';
 
+var vector_mouse = new Vector2();
 var is_drag = false;
 
 var init = function() {
@@ -113,18 +114,30 @@ var updateMover = function() {
   }
 };
 
-var applyForceClick = function(v) {
+var applyForceMouseLoop = function() {
+  if (is_drag === false) return;
+  
+  var scalar = 0;
+  
+  if (body_width > body_height) {
+    scalar = body_height;
+  } else {
+    scalar = body_width;
+  }
+  applyForceMouse(vector_mouse, scalar);
+};
+
+var applyForceMouse = function(vector, scalar_base) {
   for (var i = 0; i < movers.length; i++) {
-    var distance = v.distanceTo(movers[i].position);
-    var direct = v.clone().sub(movers[i].position);
-    var scalar = (body_width - distance) / 1000;
+    var distance = vector.distanceTo(movers[i].position);
+    var direct = vector.clone().sub(movers[i].position);
+    var scalar = (scalar_base - distance) / 100;
     var force = null;
     
     if (scalar < 0) scalar = 0;
     direct.normalize();
-    force = direct.multScalar(scalar * -1);
+    force = direct.multScalar(scalar);
     movers[i].applyForce(force);
-    console.log(v);
   };
 };
 
@@ -154,6 +167,7 @@ var render = function() {
   } else {
     ctx.globalCompositeOperation = 'normal';
   }
+  applyForceMouseLoop();
   updateMover();
 };
 
@@ -177,18 +191,22 @@ var resizeCanvas = function() {
 };
 
 var setEvent = function () {
-  var eventTouchStart = function(v) {
-    is_drag = true;
-    applyForceClick(v);
-  };
-  
-  var eventTouchMove = function(v) {
-    if (is_drag) {
-      applyForceClick(v);
+  var eventTouchStart = function() {
+    var scalar;
+    
+    if (body_width > body_height) {
+      scalar = body_height * 2;
+    } else {
+      scalar = body_width * 2;
     }
+    applyForceMouse(vector_mouse, scalar);
+    is_drag = true;
   };
   
-  var eventTouchEnd = function(v) {
+  var eventTouchMove = function() {
+  };
+  
+  var eventTouchEnd = function() {
     is_drag = false;
   };
 
@@ -202,14 +220,14 @@ var setEvent = function () {
 
   canvas.addEventListener('mousedown', function (event) {
     event.preventDefault();
-    var vector = new Vector2(event.clientX * 2, event.clientY * 2);
-    eventTouchStart(vector);
+    vector_mouse.set(event.clientX * 2, event.clientY * 2);
+    eventTouchStart();
   });
 
   canvas.addEventListener('mousemove', function (event) {
     event.preventDefault();
-    var vector = new Vector2(event.clientX * 2, event.clientY * 2);
-    eventTouchMove(vector);
+    vector_mouse.set(event.clientX * 2, event.clientY * 2);
+    eventTouchMove();
   });
 
   canvas.addEventListener('mouseup', function (event) {
@@ -219,12 +237,14 @@ var setEvent = function () {
 
   canvas.addEventListener('touchstart', function (event) {
     event.preventDefault();
-    eventTouchStart(event.touches[0].clientX, event.touches[0].clientY);
+    vector_mouse.set(event.touches[0].clientX * 2, event.touches[0].clientY * 2);
+    eventTouchStart();
   });
 
   canvas.addEventListener('touchmove', function (event) {
     event.preventDefault();
-    eventTouchMove(event.touches[0].clientX, event.touches[0].clientY);
+    vector_mouse.set(event.touches[0].clientX * 2, event.touches[0].clientY * 2);
+    eventTouchMove();
   });
 
   canvas.addEventListener('touchend', function (event) {
