@@ -31,7 +31,7 @@ var exports = function(){
       this.acceleration.add(vector);
     },
     applyFriction: function() {
-      var friction = Force.friction(this.acceleration, 0.1);
+      var friction = Force.friction(this.acceleration, 0.5);
       this.applyForce(friction);
     },
     applyDragForce: function() {
