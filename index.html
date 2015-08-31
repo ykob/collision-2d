@@ -14,8 +14,13 @@
   <meta property="og:url" content="http://ykob.github.io/demo-2d-collision-detection/">
   <meta property="og:image" content="http://ykob.github.io/demo-2d-collision-detection/img/ogp.png">
   <style>
-    canvas {
-      filter: url('#ameba');
+    .mode-glow canvas{
+      -webkit-filter:url("#glow");
+      filter:url("#glow")
+    }
+    .mode-ameba canvas{
+      -webkit-filter:url("#ameba");
+      filter:url("#ameba")
     }
   </style>
 </head>

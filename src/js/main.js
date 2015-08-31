@@ -160,7 +160,7 @@ var render = function() {
   if (mode == 'glow') {
     ctx.globalCompositeOperation = 'lighter';
   } else {
-    ctx.globalCompositeOperation = 'normal';
+    ctx.globalCompositeOperation = 'source-over';
   }
   applyForceMouseLoop();
   updateMover();
