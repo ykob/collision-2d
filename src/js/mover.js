@@ -18,6 +18,16 @@ var exports = function(){
   };
   
   Mover.prototype = {
+    init: function(vector, size) {
+      var x = vector.x;
+      var y = vector.y;
+      
+      this.radius = Util.getRandomInt(size, size * 3);
+      this.mass = this.radius / 10;
+      this.position.set(x, y);
+      this.velocity.set(x, y);
+      this.anchor.set(x, y);
+    },
     updatePosition: function() {
       this.position.copy(this.velocity);
     },

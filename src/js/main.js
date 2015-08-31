@@ -30,8 +30,7 @@ var init = function() {
     var radian = Util.getRadian(Util.getRandomInt(0, 360));
     var scalar = Util.getRandomInt(10, 20);
     var force = new Vector2(Math.cos(radian) * scalar, Math.sin(radian) * scalar);
-    var x = body_width / 2;
-    var y = body_height / 2;
+    var vector = new Vector2(body_width / 2, body_height / 2);
     var size = 0;
     
     if (body_width > body_height) {
@@ -40,11 +39,7 @@ var init = function() {
       size = body_width / 36;
     }
     
-    mover.radius = Util.getRandomInt(size, size * 3);
-    mover.mass = mover.radius / 10;
-    mover.position.set(x, y);
-    mover.velocity.set(x, y);
-    mover.anchor.set(x, y);
+    mover.init(vector, size);
     mover.applyForce(force);
     movers[i] = mover;
   }
