@@ -97,8 +97,8 @@ var updateMover = function() {
     //   if (distance < rebound_distance) {
     //     var overlap = Math.abs(distance - rebound_distance);
     //     var normal = mover.velocity.clone().sub(movers[index].velocity).normalize();
-    //     mover.velocity.sub(normal.clone().multScalar(overlap * -1));
-    //     movers[index].velocity.sub(normal.clone().multScalar(overlap));
+    //     mover.velocity.sub(normal.clone().multScalar(overlap / 2 * -1));
+    //     movers[index].velocity.sub(normal.clone().multScalar(overlap / 2));
     //     mover.rebound(normal.clone().multScalar(-1));
     //     movers[index].rebound(normal.clone());
     //   }
