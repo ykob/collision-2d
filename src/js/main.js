@@ -69,6 +69,23 @@ var updateMover = function() {
       force.divScalar(mover.mass);
       mover.applyForce(force);
     }
+    mover.updateVelocity();
+    mover.updatePosition();
+    mover.draw(ctx, mode);
+    
+    // //mover同士の衝突判定
+    // for (var index = i + 1; index < movers.length; index++) {
+    //   var distance = mover.velocity.distanceTo(movers[index].velocity);
+    //   var rebound_distance = mover.radius + movers[index].radius;
+    //   if (distance < rebound_distance) {
+    //     var overlap = Math.abs(distance - rebound_distance);
+    //     var normal = mover.velocity.clone().sub(movers[index].velocity).normalize();
+    //     mover.velocity.sub(normal.clone().multScalar(overlap / 2 * -1));
+    //     movers[index].velocity.sub(normal.clone().multScalar(overlap / 2));
+    //     mover.rebound(normal.clone().multScalar(-1));
+    //     movers[index].rebound(normal.clone());
+    //   }
+    // }
     // 壁との衝突判定
     if (mover.position.y - mover.radius < 0) {
       var normal = new Vector2(0, 1);
@@ -90,22 +107,6 @@ var updateMover = function() {
     if (collision) {
       mover.rebound(normal);
     }
-    // //mover同士の衝突判定
-    // for (var index = i + 1; index < movers.length; index++) {
-    //   var distance = mover.velocity.distanceTo(movers[index].velocity);
-    //   var rebound_distance = mover.radius + movers[index].radius;
-    //   if (distance < rebound_distance) {
-    //     var overlap = Math.abs(distance - rebound_distance);
-    //     var normal = mover.velocity.clone().sub(movers[index].velocity).normalize();
-    //     mover.velocity.sub(normal.clone().multScalar(overlap / 2 * -1));
-    //     movers[index].velocity.sub(normal.clone().multScalar(overlap / 2));
-    //     mover.rebound(normal.clone().multScalar(-1));
-    //     movers[index].rebound(normal.clone());
-    //   }
-    // }
-    mover.updateVelocity();
-    mover.updatePosition();
-    mover.draw(ctx, mode);
   }
 };
 
