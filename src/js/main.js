@@ -56,10 +56,29 @@ var init = function() {
 var updateMover = function() {
   for (var i = 0; i < movers.length; i++) {
     var mover = movers[i];
-    var collision = false;
     
-    mover.applyFriction();
-    //mover.applyDragForce();
+    // 壁との衝突判定
+    if (mover.position.y - mover.radius < 0) {
+      var normal = new Vector2(0, 1);
+      mover.velocity.y = mover.radius;
+      mover.rebound(normal);
+    }
+    if (mover.position.y + mover.radius > body_height) {
+      var normal = new Vector2(0, -1);
+      mover.velocity.y = body_height - mover.radius;
+      mover.rebound(normal);
+    }
+    if (mover.position.x - mover.radius < 0) {
+      var normal = new Vector2(1, 0);
+      mover.velocity.x = mover.radius;
+      mover.rebound(normal);
+    }
+    if (mover.position.x + mover.radius > body_width) {
+      var normal = new Vector2(-1, 0);
+      mover.velocity.x = body_width - mover.radius;
+      mover.rebound(normal);
+    }
+
     // 加速度が0になったときに再度力を加える。
     if (mover.acceleration.length() <= 1) {
       var radian = Util.getRadian(Util.getRandomInt(0, 360));
@@ -69,44 +88,10 @@ var updateMover = function() {
       force.divScalar(mover.mass);
       mover.applyForce(force);
     }
+    mover.applyFriction();
     mover.updateVelocity();
     mover.updatePosition();
     mover.draw(ctx, mode);
-    
-    // //mover同士の衝突判定
-    // for (var index = i + 1; index < movers.length; index++) {
-    //   var distance = mover.velocity.distanceTo(movers[index].velocity);
-    //   var rebound_distance = mover.radius + movers[index].radius;
-    //   if (distance < rebound_distance) {
-    //     var overlap = Math.abs(distance - rebound_distance);
-    //     var normal = mover.velocity.clone().sub(movers[index].velocity).normalize();
-    //     mover.velocity.sub(normal.clone().multScalar(overlap / 2 * -1));
-    //     movers[index].velocity.sub(normal.clone().multScalar(overlap / 2));
-    //     mover.rebound(normal.clone().multScalar(-1));
-    //     movers[index].rebound(normal.clone());
-    //   }
-    // }
-    // 壁との衝突判定
-    if (mover.position.y - mover.radius < 0) {
-      var normal = new Vector2(0, 1);
-      mover.velocity.y = mover.radius;
-      collision = true;
-    } else if (mover.position.y + mover.radius > body_height) {
-      var normal = new Vector2(0, -1);
-      mover.velocity.y = body_height - mover.radius;
-      collision = true;
-    } else if (mover.position.x - mover.radius < 0) {
-      var normal = new Vector2(1, 0);
-      mover.velocity.x = mover.radius;
-      collision = true;
-    } else if (mover.position.x + mover.radius > body_width) {
-      var normal = new Vector2(-1, 0);
-      mover.velocity.x = body_width - mover.radius;
-      collision = true;
-    }
-    if (collision) {
-      mover.rebound(normal);
-    }
   }
 };
 
