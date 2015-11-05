@@ -1,8 +1,8 @@
-# demo-2d-collision-detection
+# collision-2d
 
 2Dの衝突判定テスト。
 
-http://ykob.github.io/demo-2d-collision-detection/
+http://ykob.github.io/collision-2d/
 
 ## npm install
 
